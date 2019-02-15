@@ -1,35 +1,15 @@
 package skel
 
 import (
-	"context"
-	"fmt"
 	"net/http"
 )
 
-type endpoint map[string]handlerFunc
-
-func (e endpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fn, ok := e[r.Method]
-	if !ok {
-		fn = methodNotAllowedHandler
-	}
-
-	if err := fn(context.Background(), w, r); err != nil {
-		// TODO
-	}
-}
-
-func methodNotAllowedHandler(_ context.Context, w http.ResponseWriter, r *http.Request) error {
-	return fmt.Errorf("405 method not found")
-}
-
 // Routes defines and registers routes
 func (s *Server) Routes() *Server {
-	todos := endpoint{
-		http.MethodGet:  s.getTodos(),
-		http.MethodPost: s.postTodo(),
-	}
-	s.router.Handle("/todos", todos)
+	s.router.Handle("/todos", s.getTodos()).Methods(http.MethodGet)
+	s.router.Handle("/todos", s.postTodo()).Methods(http.MethodPost)
+	s.router.Handle("/todos/{id:[0-9]+}", s.getTodo()).Methods(http.MethodGet)
+	s.router.Handle("/todos/{id:[0-9]+}", s.deleteTodo()).Methods(http.MethodDelete)
 
 	return s
 }

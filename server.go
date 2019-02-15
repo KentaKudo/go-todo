@@ -3,11 +3,13 @@ package skel
 import (
 	"context"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // Server represents a server struct
 type Server struct {
-	router *http.ServeMux
+	router *mux.Router
 
 	todoService TodoService
 }
@@ -15,7 +17,7 @@ type Server struct {
 // New returns a new Server instance
 func New(ts TodoService) *Server {
 	return &Server{
-		router: http.NewServeMux(),
+		router: mux.NewRouter(),
 
 		todoService: ts,
 	}
@@ -32,3 +34,10 @@ func (s *Server) Run(addr string) error {
 }
 
 type handlerFunc func(context.Context, http.ResponseWriter, *http.Request) error
+
+func (fn handlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	if err := fn(ctx, w, r); err != nil {
+		// TODO
+	}
+}

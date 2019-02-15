@@ -3,7 +3,11 @@ package skel
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 // Todo represents a todo item
@@ -38,5 +42,32 @@ func (s *Server) postTodo() handlerFunc {
 		}
 
 		return json.NewEncoder(w).Encode(req)
+	}
+}
+
+func (s *Server) getTodo() handlerFunc {
+	type response Todo
+	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
+		vars := mux.Vars(r)
+		id, err := strconv.Atoi(vars["id"])
+		if err != nil {
+			return err
+		}
+		todo := Todo{Title: fmt.Sprintf("Good morning! ID is %d", id)}
+		return json.NewEncoder(w).Encode(response(todo))
+	}
+}
+
+func (s *Server) deleteTodo() handlerFunc {
+	type response struct {
+		Result string `json:"result"`
+	}
+	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
+		vars := mux.Vars(r)
+		id, err := strconv.Atoi(vars["id"])
+		if err != nil {
+			return err
+		}
+		return json.NewEncoder(w).Encode(response{Result: fmt.Sprintf("Successfully deleted %d", id)})
 	}
 }
