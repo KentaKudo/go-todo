@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"io/ioutil"
-	"log"
 
 	"github.com/caarlos0/env"
 	yaml "gopkg.in/yaml.v2"
@@ -25,7 +24,6 @@ type Config struct {
 
 // NewClient creates a new client instance from config
 func NewClient(config Config) (*Client, error) {
-	log.Println(config)
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s",
 		config.User, config.Password, config.Host, config.Database,
 	))

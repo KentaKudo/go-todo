@@ -3,10 +3,17 @@ package main
 import (
 	"log"
 
-	skel "github.com/KentaKudo/goapi-skel"
+	"github.com/KentaKudo/goapi-skel/httpserver"
 	"github.com/KentaKudo/goapi-skel/mysql"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+// TOOD
+// - debug MySQL CRUD interface
+// - Dockerise
+// - docker-compose
+// - Swagger
+// - tests
 
 func main() {
 	client, err := mysql.NewFromYaml("./dbconfig.yml")
@@ -15,5 +22,5 @@ func main() {
 	}
 
 	ts := mysql.NewTodoService(client)
-	log.Fatal(skel.New(ts).Routes().Run(":8080"))
+	log.Fatal(httpserver.New(ts).Routes().Run(":8080"))
 }

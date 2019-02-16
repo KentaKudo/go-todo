@@ -16,7 +16,7 @@ func NewTodoService(client *Client) *TodoService {
 
 // Get returns a single skel.Todo instance.
 func (ts *TodoService) Get(id int) (*skel.Todo, error) {
-	var todo *skel.Todo
+	var todo skel.Todo
 	if err := ts.client.QueryRow(`SELECT * FROM todos WHERE id = ?`, id).Scan(
 		&todo.ID,
 		&todo.Title,
@@ -24,7 +24,7 @@ func (ts *TodoService) Get(id int) (*skel.Todo, error) {
 		return nil, err
 	}
 
-	return todo, nil
+	return &todo, nil
 }
 
 // List returns a list of skel.Todo instances.
