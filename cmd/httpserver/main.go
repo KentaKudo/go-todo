@@ -9,7 +9,11 @@ import (
 )
 
 func main() {
-	client := mysql.NewClient(mysql.Config{})
+	client, err := mysql.NewFromYaml("./dbconfig.yml")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	ts := mysql.NewTodoService(client)
 	log.Fatal(skel.New(ts).Routes().Run(":8080"))
 }
