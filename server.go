@@ -23,6 +23,7 @@ func New(ts TodoService) *Server {
 	}
 }
 
+// FIXME: Only for testing; remove if possible
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.router.ServeHTTP(w, r)
 }

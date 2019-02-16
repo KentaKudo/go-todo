@@ -2,8 +2,6 @@ package skel
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,12 +10,16 @@ import (
 
 // Todo represents a todo item
 type Todo struct {
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 }
 
 // TodoService represents a service object dealing with todos
 type TodoService interface {
-	GetTodos() ([]Todo, error)
+	Get(int) (*Todo, error)
+	List() ([]Todo, error)
+	Create(*Todo) error
+	Delete(int) error
 }
 
 func (s *Server) getTodos() handlerFunc {
@@ -25,36 +27,46 @@ func (s *Server) getTodos() handlerFunc {
 		Todos []Todo `json:"todos"`
 	}
 	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
-		todos, err := s.todoService.GetTodos()
+		todos, err := s.todoService.List()
 		if err != nil {
 			return nil
 		}
-		return json.NewEncoder(w).Encode(response{Todos: todos})
+		return encode(w, response{Todos: todos})
 	}
 }
 
 func (s *Server) postTodo() handlerFunc {
 	type request Todo
+	type response Todo
 	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
 		var req request
-		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		if err := decode(r.Body, &req); err != nil {
 			return err
 		}
 
-		return json.NewEncoder(w).Encode(req)
+		if err := s.todoService.Create((*Todo)(&req)); err != nil {
+			return err
+		}
+
+		return encode(w, response(req))
 	}
 }
 
 func (s *Server) getTodo() handlerFunc {
-	type response Todo
+	type response *Todo
 	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
 		vars := mux.Vars(r)
 		id, err := strconv.Atoi(vars["id"])
 		if err != nil {
 			return err
 		}
-		todo := Todo{Title: fmt.Sprintf("Good morning! ID is %d", id)}
-		return json.NewEncoder(w).Encode(response(todo))
+
+		todo, err := s.todoService.Get(id)
+		if err != nil {
+			return err
+		}
+
+		return encode(w, response(todo))
 	}
 }
 
@@ -68,6 +80,7 @@ func (s *Server) deleteTodo() handlerFunc {
 		if err != nil {
 			return err
 		}
-		return json.NewEncoder(w).Encode(response{Result: fmt.Sprintf("Successfully deleted %d", id)})
+
+		return s.todoService.Delete(id)
 	}
 }

@@ -3,14 +3,13 @@ package main
 import (
 	"log"
 
-	"github.com/KentaKudo/goapi-skel/mock"
-
 	skel "github.com/KentaKudo/goapi-skel"
+	"github.com/KentaKudo/goapi-skel/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	ts := mock.NewTodoService(func() ([]skel.Todo, error) {
-		return []skel.Todo{skel.Todo{Title: "Hello, world"}}, nil
-	})
+	client := mysql.NewClient(mysql.Config{})
+	ts := mysql.NewTodoService(client)
 	log.Fatal(skel.New(ts).Routes().Run(":8080"))
 }

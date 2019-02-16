@@ -12,9 +12,11 @@ import (
 
 func TestGetTodos(t *testing.T) {
 	inBody, outBody := []skel.Todo{skel.Todo{Title: "test"}}, `{"todos":[{"title":"test"}]}`+"\n"
-	mock := mock.NewTodoService(func() ([]skel.Todo, error) {
+	mock := mock.NewTodoService()
+	mock.ListFn = func() ([]skel.Todo, error) {
 		return inBody, nil
-	})
+	}
+
 	sut := skel.New(mock).Routes()
 	req, _ := http.NewRequest("GET", "/todos", nil)
 	w := httptest.NewRecorder()
