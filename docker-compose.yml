@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.6
+    container_name: tododb
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: todo
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    depends_on:
+      - db
+    container_name: todoapp
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pass
+      MYSQL_HOST: db:3306
+      MYSQL_DATABASE: todo
+    ports:
+      - "8080:8080"

@@ -1,5 +1,0 @@
-development:
-  dialect: mysql
-  datasource: root:pass@tcp(localhost:3306)/todo?parseTime=true&collation=utf8mb4_general_ci&interpolateParams=true
-  dir: .
-  table: migrations
