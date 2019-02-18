@@ -10,6 +10,7 @@ import (
 
 // TOOD
 // - Swagger
+// - Makefile
 // - tests
 
 func main() {
