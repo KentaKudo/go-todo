@@ -1,6 +1,6 @@
 OUT := "bin/goapi-skel"
 PKG := "github.com/KentaKudo/goapi-skel"
-PKG_BUILD := $(PKG)
+PKG_BUILD := "${PKG}/cmd/todod"
 
 .PHONY: build
 

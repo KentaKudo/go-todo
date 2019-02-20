@@ -6,18 +6,23 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	app "github.com/KentaKudo/goapi-skel/pkg"
+	skel "github.com/KentaKudo/goapi-skel"
+	"github.com/KentaKudo/goapi-skel/pkg/httpserver"
 	"github.com/KentaKudo/goapi-skel/pkg/mock"
+	"github.com/gorilla/mux"
 )
 
 func TestGetTodos(t *testing.T) {
-	inBody, outBody := []app.Todo{app.Todo{Title: "test"}}, `{"todos":[{"title":"test"}]}`+"\n"
+	inBody, outBody := []skel.Todo{skel.Todo{ID: 0, Title: "test"}}, `{"todos":[{"id":0,"title":"test"}]}`+"\n"
 	mock := mock.NewTodoService()
-	mock.ListFn = func() ([]app.Todo, error) {
+	mock.ListFn = func() ([]skel.Todo, error) {
 		return inBody, nil
 	}
 
-	sut := app.New(mock).Routes()
+	sut := (&httpserver.Server{
+		Router:      mux.NewRouter(),
+		TodoService: mock,
+	}).Routes()
 	req, _ := http.NewRequest("GET", "/todos", nil)
 	w := httptest.NewRecorder()
 	sut.ServeHTTP(w, req)

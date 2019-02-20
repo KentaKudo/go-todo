@@ -9,11 +9,6 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// Client represents a client instance to connect MySQL.
-type Client struct {
-	*sql.DB
-}
-
 // Config represents configuration parameters to connect MySQL.
 type Config struct {
 	User     string `yaml:"user" env:"MYSQL_USER"`
@@ -22,36 +17,30 @@ type Config struct {
 	Database string `yaml:"database" env:"MYSQL_DATABASE"`
 }
 
-// NewClient creates a new client instance from config
-func NewClient(config Config) (*Client, error) {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s",
-		config.User, config.Password, config.Host, config.Database,
+func open(c Config) (*sql.DB, error) {
+	return sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s",
+		c.User, c.Password, c.Host, c.Database,
 	))
-	if err != nil {
-		return nil, err
-	}
-
-	return &Client{DB: db}, nil
 }
 
-// NewFromYaml compose a new Client instance from a yaml file.
-func NewFromYaml(path string) (*Client, error) {
+// OpenFromYaml compose a new DB handler from a yaml file.
+func OpenFromYaml(path string) (*sql.DB, error) {
 	var config Config
 	if err := load(path, &config); err != nil {
 		return nil, err
 	}
 
-	return NewClient(config)
+	return open(config)
 }
 
-// NewFromEnv compose a new Client instance from environmental variables.
-func NewFromEnv() (*Client, error) {
+// OpenFromEnv compose a new DB handler from environmental variables.
+func OpenFromEnv() (*sql.DB, error) {
 	var config Config
 	if err := env.Parse(&config); err != nil {
 		return nil, err
 	}
 
-	return NewClient(config)
+	return open(config)
 }
 
 func load(path string, v interface{}) error {

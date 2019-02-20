@@ -8,17 +8,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// TOOD
-// - Swagger
-// - Makefile
-// - tests
-
 func main() {
-	client, err := mysql.NewFromEnv()
+	db, err := mysql.OpenFromEnv()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	ts := mysql.NewTodoService(client)
-	log.Fatal(httpserver.New(ts).Routes().Run(":8080"))
+	log.Fatal(httpserver.New(db).Routes().Run(":8080"))
 }

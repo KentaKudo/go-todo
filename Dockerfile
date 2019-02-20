@@ -19,7 +19,8 @@ COPY ./ ./
 
 RUN CGO_ENABLED=0 go build \
     -installsuffix 'static' \
-    -o /app .
+    -o /app \
+    github.com/KentaKudo/goapi-skel/cmd/todod
 
 FROM scratch AS final
 

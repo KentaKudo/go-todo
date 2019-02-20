@@ -2,31 +2,35 @@ package httpserver
 
 import (
 	"context"
+	"database/sql"
 	"net/http"
 
-	app "github.com/KentaKudo/goapi-skel/pkg"
+	"github.com/KentaKudo/goapi-skel/pkg/mysql"
+
+	skel "github.com/KentaKudo/goapi-skel"
 	"github.com/gorilla/mux"
 )
 
 // Server represents a server struct
 type Server struct {
-	router *mux.Router
+	Router *mux.Router
 
-	todoService app.TodoService
+	TodoService skel.TodoService
 }
 
 // New returns a new Server instance
-func New(ts app.TodoService) *Server {
+func New(db *sql.DB) *Server {
+	ts := mysql.NewTodoService(db)
 	return &Server{
-		router: mux.NewRouter(),
+		Router: mux.NewRouter(),
 
-		todoService: ts,
+		TodoService: ts,
 	}
 }
 
 // FIXME: Only for testing; remove if possible
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.router.ServeHTTP(w, r)
+	s.Router.ServeHTTP(w, r)
 }
 
 // Run starts the server process

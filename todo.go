@@ -1,4 +1,10 @@
-package pkg
+package skel
+
+// TOOD
+// - Refactor Service and Server
+// - Swagger
+// - Makefile
+// - tests
 
 // Todo represents a todo item
 type Todo struct {

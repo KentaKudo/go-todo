@@ -23,3 +23,14 @@ services:
       MYSQL_DATABASE: todo
     ports:
       - "8080:8080"
+
+  swagger:
+    image: quay.io/goswagger/swagger
+    container_name: swagger
+    command: serve --port=8081 --no-open /api/swagger.yml
+    environment:
+      GOPATH: $HOME/go:/go
+    volumes:
+      - ./api:/api
+    ports:
+      - "8081:8081"
