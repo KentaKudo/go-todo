@@ -1,9 +1,6 @@
 package skel
 
 // TOOD
-// - Refactor Service and Server
-// - Swagger
-// - Makefile
 // - tests
 
 // Todo represents a todo item

@@ -8,6 +8,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var (
+	Version string
+)
+
 func main() {
 	db, err := mysql.OpenFromEnv()
 	if err != nil {
