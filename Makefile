@@ -17,9 +17,14 @@ deps: ## Resolve the dependencies
 
 # Binary Build
 
+todo: deps ## Build a todo client command
+	@go build -i -v -o bin/todo ${PKG}/cmd/todo
+
+todod: deps ## Build a todo API
+	@go build -i -v -o bin/todod ${PKG}/cmd/todod
+
 .PHONY: build
-build: deps ## Build the main.go file
-	@go build -i -v -o $(OUT) $(PKG_BUILD)
+build: todo todod
 
 .PHONY: install
 install:
