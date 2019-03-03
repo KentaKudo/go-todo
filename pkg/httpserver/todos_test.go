@@ -9,16 +9,16 @@ import (
 	"reflect"
 	"testing"
 
-	skel "github.com/KentaKudo/goapi-skel"
-	"github.com/KentaKudo/goapi-skel/pkg/httpserver"
-	"github.com/KentaKudo/goapi-skel/pkg/mock"
+	todo "github.com/KentaKudo/go-todo"
+	"github.com/KentaKudo/go-todo/pkg/httpserver"
+	"github.com/KentaKudo/go-todo/pkg/mock"
 	"github.com/gorilla/mux"
 )
 
 func TestGetTodos(t *testing.T) {
-	inBody, outBody := []skel.Todo{skel.Todo{ID: 0, Title: "test"}}, `{"todos":[{"id":0,"title":"test"}]}`+"\n"
+	inBody, outBody := []todo.Todo{todo.Todo{ID: 0, Title: "test"}}, `{"todos":[{"id":0,"title":"test"}]}`+"\n"
 	mock := mock.NewTodoService()
-	mock.ListFn = func() ([]skel.Todo, error) {
+	mock.ListFn = func() ([]todo.Todo, error) {
 		return inBody, nil
 	}
 
@@ -36,10 +36,10 @@ func TestGetTodos(t *testing.T) {
 }
 
 func TestPostTodo(t *testing.T) {
-	inBody, outBody := `{"title":"test"}`, &skel.Todo{Title: "test"}
+	inBody, outBody := `{"title":"test"}`, &todo.Todo{Title: "test"}
 	inID, outID := 123, 123
 	mock := mock.NewTodoService()
-	mock.CreateFn = func(td *skel.Todo) error {
+	mock.CreateFn = func(td *todo.Todo) error {
 		if got, want := td, outBody; !reflect.DeepEqual(got, want) {
 			t.Errorf("POST /todos: got %v, want %v", got, want)
 		}
@@ -65,9 +65,9 @@ func TestPostTodo(t *testing.T) {
 
 func TestGetTodo(t *testing.T) {
 	inID, outID := 123, 123
-	inBody, outBody := &skel.Todo{ID: inID, Title: "test"}, fmt.Sprintf(`{"id":%d,"title":"test"}`, inID)+"\n"
+	inBody, outBody := &todo.Todo{ID: inID, Title: "test"}, fmt.Sprintf(`{"id":%d,"title":"test"}`, inID)+"\n"
 	mock := mock.NewTodoService()
-	mock.GetFn = func(id int) (*skel.Todo, error) {
+	mock.GetFn = func(id int) (*todo.Todo, error) {
 		if got, want := id, outID; got != want {
 			t.Errorf("GET /todos/%d: got %v, want %v", inID, got, want)
 		}

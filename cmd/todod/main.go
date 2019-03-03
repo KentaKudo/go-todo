@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/KentaKudo/goapi-skel/pkg/httpserver"
-	"github.com/KentaKudo/goapi-skel/pkg/mysql"
+	"github.com/KentaKudo/go-todo/pkg/httpserver"
+	"github.com/KentaKudo/go-todo/pkg/mysql"
 	_ "github.com/go-sql-driver/mysql"
 )
 

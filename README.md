@@ -1,2 +1,1 @@
-# goapi-skel
-A skeleton repository for Go REST API with MySQL
+A todo app in Go

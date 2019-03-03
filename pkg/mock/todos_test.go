@@ -4,15 +4,15 @@ import (
 	"reflect"
 	"testing"
 
-	skel "github.com/KentaKudo/goapi-skel"
-	"github.com/KentaKudo/goapi-skel/pkg/mock"
+	todo "github.com/KentaKudo/go-todo"
+	"github.com/KentaKudo/go-todo/pkg/mock"
 )
 
 func TestGet(t *testing.T) {
 	mockID := 123
-	mockTodo := &skel.Todo{ID: 456, Title: "test"}
+	mockTodo := &todo.Todo{ID: 456, Title: "test"}
 	sut := mock.NewTodoService()
-	sut.GetFn = func(id int) (*skel.Todo, error) {
+	sut.GetFn = func(id int) (*todo.Todo, error) {
 		if got, want := id, mockID; got != want {
 			t.Errorf("Get(%d): got %v, want %v", mockID, got, want)
 		}
@@ -32,12 +32,12 @@ func TestGet(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	mockTodos := []skel.Todo{
-		skel.Todo{ID: 123, Title: "test1"},
-		skel.Todo{ID: 456, Title: "test2"},
+	mockTodos := []todo.Todo{
+		todo.Todo{ID: 123, Title: "test1"},
+		todo.Todo{ID: 456, Title: "test2"},
 	}
 	sut := mock.NewTodoService()
-	sut.ListFn = func() ([]skel.Todo, error) {
+	sut.ListFn = func() ([]todo.Todo, error) {
 		return mockTodos, nil
 	}
 
@@ -54,9 +54,9 @@ func TestList(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
-	mockTodo := &skel.Todo{Title: "test"}
+	mockTodo := &todo.Todo{Title: "test"}
 	sut := mock.NewTodoService()
-	sut.CreateFn = func(td *skel.Todo) error {
+	sut.CreateFn = func(td *todo.Todo) error {
 		if got, want := td, mockTodo; !reflect.DeepEqual(got, want) {
 			t.Errorf("Create(%v): got %v, want %v", mockTodo, got, want)
 		}

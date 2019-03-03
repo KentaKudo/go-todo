@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/KentaKudo/goapi-skel/pkg/mysql"
+	"github.com/KentaKudo/go-todo/pkg/mysql"
 
-	skel "github.com/KentaKudo/goapi-skel"
+	todo "github.com/KentaKudo/go-todo"
 	"github.com/gorilla/mux"
 )
 
@@ -15,7 +15,7 @@ import (
 type Server struct {
 	Router *mux.Router
 
-	TodoService skel.TodoService
+	TodoService todo.TodoService
 }
 
 // New returns a new Server instance

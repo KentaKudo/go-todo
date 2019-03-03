@@ -1,7 +1,7 @@
 VERSION := v0.1.0
 
-OUT := "bin/goapi-skel"
-PKG := "github.com/KentaKudo/goapi-skel"
+OUT := "bin/go-todo"
+PKG := "github.com/KentaKudo/go-todo"
 PKG_BUILD := "${PKG}/cmd/todod"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 LDFLAGS := -ldflags="-s -w -X \"main.Version=$(VERSION)\" -extldflags \"-static\""

@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"strconv"
 
-	skel "github.com/KentaKudo/goapi-skel"
+	todo "github.com/KentaKudo/go-todo"
 	"github.com/gorilla/mux"
 )
 
 func (s *Server) getTodos() handlerFunc {
 	type response struct {
-		Todos []skel.Todo `json:"todos"`
+		Todos []todo.Todo `json:"todos"`
 	}
 	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
 		todos, err := s.TodoService.List()
@@ -23,15 +23,15 @@ func (s *Server) getTodos() handlerFunc {
 }
 
 func (s *Server) postTodo() handlerFunc {
-	type request skel.Todo
-	type response skel.Todo
+	type request todo.Todo
+	type response todo.Todo
 	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
 		var req request
 		if err := decode(r.Body, &req); err != nil {
 			return err
 		}
 
-		if err := s.TodoService.Create((*skel.Todo)(&req)); err != nil {
+		if err := s.TodoService.Create((*todo.Todo)(&req)); err != nil {
 			return err
 		}
 
@@ -40,7 +40,7 @@ func (s *Server) postTodo() handlerFunc {
 }
 
 func (s *Server) getTodo() handlerFunc {
-	type response *skel.Todo
+	type response *todo.Todo
 	return func(_ context.Context, w http.ResponseWriter, r *http.Request) error {
 		vars := mux.Vars(r)
 		id, err := strconv.Atoi(vars["id"])

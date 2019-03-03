@@ -1,7 +1,4 @@
-package skel
-
-// TOOD
-// - tests
+package todo
 
 // Todo represents a todo item
 type Todo struct {
